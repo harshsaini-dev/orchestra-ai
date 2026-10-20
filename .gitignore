@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.env
+data/*.db*
+*.pyc
+data/rag/
+
+node_modules/
+.coverage
+htmlcov/
+*.sqlite3*
+data/dense/
+models/
+.ruff_cache/

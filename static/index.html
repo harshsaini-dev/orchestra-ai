@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OrchestraAI — Operations workspace</title>
+<link rel="stylesheet" href="/static/styles.css">
+<link rel="stylesheet" href="/static/workspace.css">
+<script type="module" src="/static/app.js">
+</script>
+</head>
+<body>
+<aside class="rail">
+<a href="/" class="brand">
+<span class="logo">o.</span>
+<span>OrchestraAI<small>OPERATIONS WORKSPACE</small>
+</span>
+</a>
+<div class="rail-label">WORKSPACE / 01</div>
+<nav aria-label="Workspace navigation">
+<button class="nav active" data-view="console">
+<span>◈</span> Live console <b>01</b>
+</button>
+<button class="nav" data-view="history">
+<span>↳</span> Run history <b id="history-count">0</b>
+</button>
+<button class="nav" data-view="orders">
+<span>▤</span> Order records</button>
+<button class="nav" data-view="knowledge">
+<span>⊞</span> Policy library</button>
+<button class="nav" data-view="rag">
+<span>⌕</span> RAG knowledge</button>
+<button class="nav" data-view="guide">
+<span>?</span> How it works</button>
+</nav>
+<div class="rail-note">
+<span class="tiny-dot">
+</span> LOCAL ENVIRONMENT<p>Synthetic orders.<br>Simulated transactions.</p>
+</div>
+<div class="profile">
+<span>HS</span>
+<div>Harsh Saini<small>MCA · Project workspace</small>
+</div>
+<b>PHASE 02</b>
+</div>
+</aside>
+<main>
+<header class="topbar">
+<div>Workspace <span>/</span> <b id="breadcrumb">Live console</b>
+</div>
+<div class="topbar-actions"><button id="theme-toggle" class="small-button" aria-label="Toggle light and dark theme">Light mode</button><div class="connection" id="connection">Connecting…</div></div>
+</header>
+<div class="page-head">
+<div>
+<p class="eyebrow">ORCHESTRA / / BUSINESS AUTOMATION</p>
+<h1 id="page-title">Operations, in motion.</h1>
+<p id="page-subtitle">Follow the agents, inspect their work, and stay in control.</p>
+</div>
+<div class="edition">O1 · O2 · O4<span>Live execution workspace</span>
+</div>
+</div>
+<div id="error" role="alert" class="error" hidden>
+</div>
+<section class="view" id="view-console">
+<div class="metrics">
+<div>
+<span>WORKFLOWS</span>
+<strong id="metric-workflows">0</strong>
+<small>Recorded in this workspace</small>
+</div>
+<div>
+<span>AWAITING REVIEW</span>
+<strong id="metric-pending">0</strong>
+<button id="open-queue" class="text-button">Open approval queue ↗</button>
+</div>
+<div>
+<span>COMPLETED</span>
+<strong id="metric-completed">0</strong>
+<small>Resolved workflows</small>
+</div>
+<div>
+<span>AUDIT EVENTS</span>
+<strong id="metric-audit_events">0</strong>
+<small>Business decision records</small>
+</div>
+</div>
+<div class="workspace-grid">
+<section class="request-panel panel">
+<div class="panel-top">
+<span class="eyebrow">01 / REQUEST</span>
+<span class="mono">NEW RUN</span>
+</div>
+<h2>What needs doing?</h2>
+<p class="muted">Choose an order and describe the task.</p>
+<form id="run-form">
+<label for="order">Order record</label>
+<select id="order" required>
+</select>
+<label for="intent">Requested operation</label>
+<select id="intent">
+<option value="auto">Detect from message</option>
+<option value="status">Check order status</option>
+<option value="cancel" selected>Cancel order</option>
+<option value="refund">Request refund</option>
+</select>
+<label for="message">Customer request</label>
+<textarea id="message" minlength="3" maxlength="2000" required rows="4">Please cancel my order and refund the payment.</textarea>
+<div class="scenario-label">QUICK SCENARIOS</div>
+<div class="scenario-buttons">
+<button type="button" data-scenario="cancel">Cancellation</button>
+<button type="button" data-scenario="refund">Refund</button>
+<button type="button" data-scenario="status">Status check</button>
+</div>
+<label class="check">
+<input type="checkbox" id="guided" checked>
+<span>Presentation pace<small>Pause 0.8s before each agent runs.</small>
+</span>
+</label>
+<label class="check">
+<input type="checkbox" id="gemini">
+<span>Gemini assistance<small id="gemini-hint">Checking configuration…</small>
+</span>
+</label>
+<label class="check">
+<input type="checkbox" id="use-rag" disabled>
+<span>Document RAG<small id="workflow-rag-hint">Configure and index in RAG knowledge.</small>
+</span>
+</label>
+<button class="primary run-button" id="run" type="submit">Start workflow <span>↗</span>
+</button>
+</form>
+<p class="footnote">Actions affecting an order always need your approval.</p>
+</section>
+<div class="execution-column">
+<section class="canvas panel">
+<div class="panel-top">
+<span class="eyebrow">02 / EXECUTION MAP</span>
+<span class="status-pill" id="run-status">READY</span>
+</div>
+<div class="canvas-heading">
+<div>
+<h2 id="execution-title">Inside the orchestration.</h2>
+<p id="execution-subtitle">Start a workflow to watch the hand-offs in real time.</p>
+</div>
+<button id="stop" class="small-button" hidden>Stop run</button>
+</div>
+<div id="spatial-graph" class="spatial-graph" aria-label="Interactive 3D agent message graph"></div>
+<div class="agent-map" id="agent-map" aria-label="Agent execution map">
+</div>
+<div class="map-bottom">
+<div>
+<span class="dot-key done">
+</span> Complete <span class="dot-key running">
+</span> Working <span class="dot-key waiting">
+</span> Approval</div>
+<span id="stage-count" class="mono">0 / 5 stages resolved</span>
+</div>
+<div id="live-announcement" class="sr-only" aria-live="polite">
+</div>
+</section>
+<section class="execution-timing panel"><div class="panel-top"><span class="eyebrow">EXECUTION TIMELINE</span><span id="trace-id" class="mono">AWAITING RUN</span></div><div id="gantt" aria-label="Agent execution durations"></div></section>
+<div class="detail-grid">
+<section class="panel inspector">
+<div class="panel-top">
+<span class="eyebrow">AGENT INSPECTOR</span>
+<span class="mono" id="inspector-state">IDLE</span>
+</div>
+<h3 id="inspector-title">Planner Agent</h3>
+<p id="inspector-purpose" class="muted">
+</p>
+<dl class="inspector-meta">
+<div>
+<dt>Compute time</dt>
+<dd id="inspector-duration">—</dd>
+</div>
+<div>
+<dt>Latest event</dt>
+<dd id="inspector-time">—</dd>
+</div>
+</dl>
+<details id="input-details">
+<summary>Input & purpose</summary>
+<pre id="inspector-input">No input yet.</pre>
+</details>
+<details id="output-details">
+<summary>Output & evidence</summary>
+<pre id="inspector-output">No output yet.</pre>
+</details>
+</section>
+<section class="panel timeline-panel">
+<div class="panel-top">
+<span class="eyebrow">EVENT STREAM</span>
+<span class="mono" id="event-count">0 EVENTS</span>
+</div>
+<ol id="timeline" class="timeline">
+<li class="empty">Your live execution log will appear here.</li>
+</ol>
+<div class="replay-controls">
+<button id="replay-toggle" class="text-button" disabled>Inspect past steps</button>
+<span id="replay-label" class="mono">LIVE</span>
+<div id="replay-controls" hidden>
+<button id="step-back" class="small-button" aria-label="Previous event">←</button>
+<input id="replay-range" type="range" min="1" max="1" value="1" aria-label="Historical event position">
+<button id="step-next" class="small-button" aria-label="Next event">→</button>
+</div>
+</div>
+</section>
+</div>
+<section id="result" class="panel result" hidden>
+<div class="panel-top">
+<span class="eyebrow">03 / RESOLUTION</span>
+<a id="export" class="text-button" download>Download audit ↗</a>
+</div>
+<div class="result-head">
+<h2 id="result-title">
+</h2>
+<span class="status-pill" id="result-status">
+</span>
+</div>
+<p id="result-response">
+</p>
+<div id="result-meta" class="result-meta">
+</div>
+<section id="workflow-rag" class="workflow-rag" hidden>
+</section>
+<div id="approval" class="approval" hidden>
+<div>
+<span class="eyebrow">HUMAN CHECKPOINT</span>
+<h3>Review before execution.</h3>
+<p id="approval-description">
+</p>
+</div>
+<form id="review-form">
+<label for="reviewer">Reviewer name</label>
+<input id="reviewer" placeholder="Enter your name" minlength="2" maxlength="80" required>
+<label for="review-note">Review note (optional)</label>
+<input id="review-note" maxlength="500" placeholder="Reason for your decision">
+<div class="review-buttons">
+<button class="primary" name="decision" value="approve">Approve & execute</button>
+<button class="secondary" name="decision" value="reject">Reject action</button>
+</div>
+</form>
+</div>
+<div id="comparison">
+</div>
+<details class="evidence">
+<summary>Policy evidence & decision details</summary>
+<div id="evidence">
+</div>
+</details>
+</section>
+</div>
+</div>
+</section>
+<section class="view" id="view-history" hidden>
+<div class="panel history-panel">
+<div class="section-heading">
+<div>
+<span class="eyebrow">WORKFLOW REGISTER</span>
+<h2>Every run has a record.</h2>
+</div>
+<button id="csv-export" class="secondary">Export CSV ↗</button>
+</div>
+<div class="filters">
+<input id="history-search" type="search" placeholder="Search order, request ID or response" aria-label="Search runs">
+<select id="history-filter" aria-label="Filter status">
+<option value="all">All statuses</option>
+<option value="pending_approval">Awaiting approval</option>
+<option value="completed">Completed</option>
+<option value="escalated">Escalated</option>
+<option value="rejected">Rejected</option>
+</select>
+<span id="history-total" class="mono">
+</span>
+</div>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>WORKFLOW / CREATED</th>
+<th>ORDER</th>
+<th>OPERATION</th>
+<th>STATUS</th>
+<th>
+</th>
+</tr>
+</thead>
+<tbody id="history-body">
+</tbody>
+</table>
+</div>
+<p class="footnote">Latest 100 workflows. Open a run to inspect its trace, replay recorded steps, or review a pending action.</p>
+</div>
+</section>
+<section class="view" id="view-orders" hidden>
+<div class="panel">
+<div class="section-heading">
+<div>
+<span class="eyebrow">BUSINESS DATA</span>
+<h2>Order records</h2>
+</div>
+<span class="status-pill">SYNTHETIC DATA</span>
+</div>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>ORDER / CUSTOMER</th>
+<th>PRODUCT</th>
+<th>AMOUNT</th>
+<th>ORDER STATUS</th>
+<th>PAYMENT</th>
+<th>VERSION</th>
+</tr>
+</thead>
+<tbody id="orders-body">
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section class="view" id="view-knowledge" hidden>
+<div class="section-heading">
+<div>
+<span class="eyebrow">RETRIEVAL KNOWLEDGE</span>
+<h2>Policy library</h2>
+</div>
+<span class="muted">BM25 lexical search + intent routing</span>
+</div>
+<div id="policies" class="policy-grid">
+</div>
+</section>
+<section class="view" id="view-rag" hidden>
+<div class="section-heading">
+<div>
+<span class="eyebrow">RETRIEVAL-AUGMENTED GENERATION</span>
+<h2>Answers with a source.</h2>
+</div>
+<span class="status-pill" id="rag-status">CHECKING</span>
+</div>
+<div class="rag-flow">
+<span>01 / DOCUMENTS</span>
+<span>02 / CHUNKS</span>
+<span>03 / EMBEDDINGS</span>
+<span>04 / CHROMA</span>
+<span>05 / GEMINI + CITATIONS</span>
+</div>
+<div id="rag-notice" class="rag-notice" role="status">
+</div>
+<div class="rag-columns">
+<section class="panel">
+<div class="panel-top">
+<span class="eyebrow">KNOWLEDGE COLLECTION</span>
+<span id="rag-count" class="mono">
+</span>
+</div>
+<p class="muted rag-small">Add a text-based PDF, TXT or Markdown file. Up to 2 MB, 40 PDF pages and 60,000 extracted characters.</p>
+<form id="rag-upload-form">
+<label for="rag-file">Document</label>
+<input id="rag-file" type="file" accept=".pdf,.txt,.md" required>
+<button class="secondary" type="submit">Upload & chunk</button>
+</form>
+<div class="rag-index-bar">
+<button id="rag-index" class="primary" disabled>Build vector index ↗</button>
+<button id="rag-refresh" class="text-button">Refresh status</button>
+</div>
+<p class="footnote">Indexing sends document chunks to Gemini for embeddings. Questions and retrieved excerpts are sent for answer generation. Use documents you are comfortable processing with this provider.</p>
+<div id="rag-documents" class="rag-documents">
+</div>
+<details id="rag-chunk-panel" hidden>
+<summary>Document chunk preview</summary>
+<div id="rag-chunks">
+</div>
+</details>
+</section>
+<section class="panel">
+<div class="panel-top">
+<span class="eyebrow">ASK YOUR KNOWLEDGE BASE</span>
+<span class="mono">GROUNDED Q&A</span>
+</div>
+<form id="rag-ask-form">
+<label for="rag-question">Question</label>
+<textarea id="rag-question" rows="3" minlength="3" maxlength="1500" required>When is an order eligible for a refund?</textarea>
+<label for="rag-scope">Search scope</label>
+<select id="rag-scope">
+<option value="all">All documents</option>
+<option value="policy">Governing policies only</option>
+</select>
+<div class="rag-index-bar">
+<button id="rag-ask" class="primary" type="submit" disabled>Retrieve & generate ↗</button>
+<button id="rag-retrieve" class="secondary" type="button" disabled>Retrieve only</button>
+</div>
+</form>
+<p id="rag-progress" class="rag-small muted" aria-live="polite">
+</p>
+<div id="rag-answer" hidden>
+</div>
+<details class="rag-setup">
+<summary>Setup and honest limitations</summary>
+<p>Run start_rag.bat to install ChromaDB and PDF support. Copy .env.example to .env, add GEMINI_API_KEY locally, and restart the server. Then build the index. A configured key still needs model access, quota and internet.</p>
+<p>No local embedding model is downloaded. The default offline workflow remains rule-based. RAG is enabled explicitly and fails visibly if a model call fails. Citation checks validate IDs and exact quotes, not every claim's meaning.</p>
+<p>Uploaded documents support Q&A. Live business agents use only the governing policy collection for RAG explanations; uploaded instructions cannot grant cancellation or refund permissions.</p>
+</details>
+</section>
+</div>
+</section>
+<section class="view" id="view-guide" hidden>
+<div class="guide-intro">
+<span class="eyebrow">YOUR PRACTICAL, EXPLAINED</span>
+<h2>Follow the request.<br>Understand the system.</h2>
+<p>OrchestraAI routes an order request through five specialised software agents. Each has a separate responsibility. The graph shows persisted request/reply messages, explicit agent states, and actual backend events.</p>
+</div>
+<div class="guide-grid" id="guide-agents">
+</div>
+<div class="panel guide-note">
+<h3>What to show in your practical</h3>
+<p>Choose Cancellation → Start workflow. Watch Planner, Data, Policy and Decision run. The Action Agent waits for your approval. Enter your name and approve. Compare the stored order snapshot with the current record, then download the audit.</p>
+<h3>What is implemented?</h3>
+<p>Python / FastAPI backend, SQLite records, deterministic business rules, policy retrieval, document RAG with ChromaDB and Gemini citations, live server-sent events, a bounded worker queue, persisted traces, historical replay, and transactional approvals.</p>
+<p>The default mode uses rules and works without an API key. Gemini assistance is optional and never authorises a refund. All money movements in this academic prototype are simulated.</p>
+<a href="/docs" target="_blank" rel="noopener" class="text-button">Explore the API documentation ↗</a>
+</div>
+</section>
+<footer>ORCHESTRA / <span>Built for explainable business automation.</span>
+<span>Local workspace · PHASE 02</span>
+</footer>
+</main>
+</body>
+</html>

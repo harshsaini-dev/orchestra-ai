@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "checks": [
+    "Registration and workspace creation through forms",
+    "Eight interactive graph nodes",
+    "Real SSE, agent states and measured timeline",
+    "Keyboard agent inspection",
+    "Audited report and downloadable PDF",
+    "Record and policy evidence before simulated refund approval",
+    "Cited Q&A and source viewer",
+    "Side-by-side policy impact",
+    "Measured evaluation screen",
+    "Persisted read-only event replay",
+    "Theme and command palette",
+    "All ten page routes render"
+  ],
+  "streamEvents": 112,
+  "limitation": "DOM/API emulator; no actual browser screenshot, responsive pixel layout, CSS animation frames or GPU rendering verified."
+}

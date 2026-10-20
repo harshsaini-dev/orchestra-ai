@@ -1,0 +1,15 @@
+{
+  "name": "orchestra-ai-ui-checks",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:ui": "node tests/workspace_ui.mjs",
+    "test:legacy-ui": "node tests/ui_smoke.mjs"
+  },
+  "devDependencies": {
+    "happy-dom": "21.0.3"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

@@ -1,0 +1,515 @@
+{
+  "id": "WF-8D429DC0DFEF",
+  "order_id": "ORD-1001",
+  "status": "completed",
+  "intent": "cancel",
+  "message": "Please cancel my order and refund the payment.",
+  "mode": "offline_rules",
+  "policy_hash": "4593dddd7165d2f5fa6e8c75401e2a8a4dcd3974488cdc5c4a3d873c16e94fff",
+  "response": "Cancellation completed. Simulated refund: INR 2,499.00. No real money was transferred.",
+  "created_at": "2026-10-13T17:54:02+00:00",
+  "updated_at": "2026-10-13T17:54:03+00:00",
+  "request_key": "af35dab6-b906-4e16-ab55-2a93891071d8",
+  "request_hash": "5f03d8900dacd3f59d37421e3b0f7a87b0b8c2d555fdd391301b1dc397cb89a6",
+  "decision": {
+    "action": "cancel_order",
+    "eligible": true,
+    "requires_approval": true,
+    "policy_ids": [
+      "POL-CANCEL"
+    ],
+    "reason": "Eligible for cancellation before shipment. Human approval is required for cancellation and a full simulated refund.",
+    "amount_paise": 249900,
+    "warnings": []
+  },
+  "evidence": [
+    {
+      "id": "POL-CANCEL",
+      "title": "Cancellation before shipment",
+      "intents": [
+        "cancel"
+      ],
+      "allowed_statuses": [
+        "processing"
+      ],
+      "text": "Cancellation is permitted only before shipment, while an order is processing. Human approval is mandatory. A paid cancellation also records a full simulated refund. An unpaid cancellation changes only the order status. Shipped and delivered orders require manual review. Already cancelled orders need no further cancellation.",
+      "score": 10.9899,
+      "source": "data/policies.json"
+    },
+    {
+      "id": "POL-CONTROL",
+      "title": "Approval and execution controls",
+      "intents": [
+        "status",
+        "cancel",
+        "refund",
+        "unknown"
+      ],
+      "text": "Agents may call only registered tools. Cancellation and refund actions require a recorded human approval. Before executing, recheck the order version, active policy version and eligibility. Execute each approved workflow once in a database transaction. Preserve decisions, evidence, approval and execution results in the audit trail. Escalate ambiguous requests.",
+      "score": 1.1513,
+      "source": "data/policies.json"
+    },
+    {
+      "id": "POL-STATUS",
+      "title": "Order status and delivery updates",
+      "intents": [
+        "status"
+      ],
+      "text": "Read the current order status and expected delivery date from the order database. Mark an undelivered active order as delayed when its expected delivery date has passed. Status checks never change an order.",
+      "score": 0.933,
+      "source": "data/policies.json"
+    }
+  ],
+  "snapshot": {
+    "id": "ORD-1001",
+    "customer": "Aarav Sharma",
+    "product": "Wireless keyboard",
+    "amount_paise": 249900,
+    "status": "processing",
+    "payment_status": "paid",
+    "due_at": "2026-10-11T17:53:56+00:00",
+    "delivered_at": null,
+    "version": 1
+  },
+  "events": [
+    {
+      "id": 1,
+      "workflow_id": "WF-8D429DC0DFEF",
+      "agent": "Planner Agent",
+      "event": "plan_created",
+      "created_at": "2026-10-13T17:54:02+00:00",
+      "detail": {
+        "intent": "cancel",
+        "steps": [
+          "read_order",
+          "retrieve_policy",
+          "evaluate",
+          "approve_if_required",
+          "execute_and_log"
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "workflow_id": "WF-8D429DC0DFEF",
+      "agent": "Data Agent",
+      "event": "tool_result",
+      "created_at": "2026-10-13T17:54:02+00:00",
+      "detail": {
+        "tool": "get_order_status",
+        "order": {
+          "id": "ORD-1001",
+          "customer": "Aarav Sharma",
+          "product": "Wireless keyboard",
+          "amount_paise": 249900,
+          "status": "processing",
+          "payment_status": "paid",
+          "due_at": "2026-10-11T17:53:56+00:00",
+          "delivered_at": null,
+          "version": 1
+        }
+      }
+    },
+    {
+      "id": 3,
+      "workflow_id": "WF-8D429DC0DFEF",
+      "agent": "Policy Agent",
+      "event": "policies_retrieved",
+      "created_at": "2026-10-13T17:54:02+00:00",
+      "detail": {
+        "method": "BM25 lexical search + intent routing",
+        "sources": [
+          {
+            "id": "POL-CANCEL",
+            "score": 10.9899
+          },
+          {
+            "id": "POL-CONTROL",
+            "score": 1.1513
+          },
+          {
+            "id": "POL-STATUS",
+            "score": 0.933
+          }
+        ],
+        "policy_hash": "4593dddd7165d2f5fa6e8c75401e2a8a4dcd3974488cdc5c4a3d873c16e94fff"
+      }
+    },
+    {
+      "id": 4,
+      "workflow_id": "WF-8D429DC0DFEF",
+      "agent": "Decision Agent",
+      "event": "decision_made",
+      "created_at": "2026-10-13T17:54:02+00:00",
+      "detail": {
+        "action": "cancel_order",
+        "eligible": true,
+        "requires_approval": true,
+        "policy_ids": [
+          "POL-CANCEL"
+        ],
+        "reason": "Eligible for cancellation before shipment. Human approval is required for cancellation and a full simulated refund.",
+        "amount_paise": 249900,
+        "warnings": []
+      }
+    },
+    {
+      "id": 5,
+      "workflow_id": "WF-8D429DC0DFEF",
+      "agent": "Orchestrator",
+      "event": "workflow_pending_approval",
+      "created_at": "2026-10-13T17:54:02+00:00",
+      "detail": {
+        "status": "pending_approval",
+        "mode": "offline_rules"
+      }
+    },
+    {
+      "id": 6,
+      "workflow_id": "WF-8D429DC0DFEF",
+      "agent": "Human Reviewer",
+      "event": "approval_granted",
+      "created_at": "2026-10-13T17:54:03+00:00",
+      "detail": {
+        "approve": true,
+        "reviewer": "Harsh Saini",
+        "note": ""
+      }
+    },
+    {
+      "id": 7,
+      "workflow_id": "WF-8D429DC0DFEF",
+      "agent": "Action Agent",
+      "event": "tool_executed",
+      "created_at": "2026-10-13T17:54:03+00:00",
+      "detail": {
+        "tool": "cancel_order",
+        "order_status": "cancelled",
+        "payment_status": "refunded",
+        "refund_paise": 249900,
+        "simulation": true
+      }
+    },
+    {
+      "id": 8,
+      "workflow_id": "WF-8D429DC0DFEF",
+      "agent": "Orchestrator",
+      "event": "workflow_completed",
+      "created_at": "2026-10-13T17:54:03+00:00",
+      "detail": {
+        "response": "Cancellation completed. Simulated refund: INR 2,499.00. No real money was transferred."
+      }
+    }
+  ],
+  "approval": {
+    "workflow_id": "WF-8D429DC0DFEF",
+    "approved": 1,
+    "reviewer": "Harsh Saini",
+    "note": "",
+    "created_at": "2026-10-13T17:54:03+00:00"
+  },
+  "execution_jobs": [
+    {
+      "id": "JOB-0EF056FFBB65",
+      "kind": "run",
+      "status": "done",
+      "workflow_id": "WF-8D429DC0DFEF",
+      "fingerprint": "86e5df62c7cea1d7d5b9f4bfb913fc718af3e8770e16b47ec615a30140100872",
+      "request_key": "run:af35dab6-b906-4e16-ab55-2a93891071d8",
+      "guided": 1,
+      "cancel_requested": 0,
+      "error": null,
+      "created_at": "2026-10-13T17:53:58.789+00:00",
+      "updated_at": "2026-10-13T17:54:02.005+00:00",
+      "request": {
+        "order_id": "ORD-1001",
+        "message": "Please cancel my order and refund the payment.",
+        "intent": "cancel",
+        "use_gemini": false,
+        "use_rag": false,
+        "request_key": "af35dab6-b906-4e16-ab55-2a93891071d8"
+      },
+      "events": [
+        {
+          "id": 1,
+          "job_id": "JOB-0EF056FFBB65",
+          "kind": "queued",
+          "agent": "Orchestrator",
+          "detail": {
+            "message": "Request accepted into the local worker queue.",
+            "kind": "run"
+          },
+          "created_at": "2026-10-13T17:53:58.789+00:00"
+        },
+        {
+          "id": 2,
+          "job_id": "JOB-0EF056FFBB65",
+          "kind": "agent_started",
+          "agent": "Planner Agent",
+          "detail": {
+            "input": "Please cancel my order and refund the payment.",
+            "selected_intent": "cancel",
+            "purpose": "Identify the requested operation and plan the hand-offs.",
+            "presentation_delay_ms": 800
+          },
+          "created_at": "2026-10-13T17:53:58.793+00:00"
+        },
+        {
+          "id": 3,
+          "job_id": "JOB-0EF056FFBB65",
+          "kind": "agent_completed",
+          "agent": "Planner Agent",
+          "detail": {
+            "intent": "cancel",
+            "steps": [
+              "read_order",
+              "retrieve_policy",
+              "evaluate",
+              "approve_if_required",
+              "execute_and_log"
+            ],
+            "duration_ms": 0.01,
+            "presentation_delay_ms": 0
+          },
+          "created_at": "2026-10-13T17:53:59.595+00:00"
+        },
+        {
+          "id": 4,
+          "job_id": "JOB-0EF056FFBB65",
+          "kind": "agent_started",
+          "agent": "Data Agent",
+          "detail": {
+            "order_id": "ORD-1001",
+            "tool": "get_order_status",
+            "purpose": "Read the business record through a permitted tool.",
+            "presentation_delay_ms": 800
+          },
+          "created_at": "2026-10-13T17:53:59.596+00:00"
+        },
+        {
+          "id": 5,
+          "job_id": "JOB-0EF056FFBB65",
+          "kind": "agent_completed",
+          "agent": "Data Agent",
+          "detail": {
+            "tool": "get_order_status",
+            "order": {
+              "id": "ORD-1001",
+              "customer": "Aarav Sharma",
+              "product": "Wireless keyboard",
+              "amount_paise": 249900,
+              "status": "processing",
+              "payment_status": "paid",
+              "due_at": "2026-10-11T17:53:56+00:00",
+              "delivered_at": null,
+              "version": 1
+            },
+            "duration_ms": 0.326,
+            "presentation_delay_ms": 0
+          },
+          "created_at": "2026-10-13T17:54:00.399+00:00"
+        },
+        {
+          "id": 6,
+          "job_id": "JOB-0EF056FFBB65",
+          "kind": "agent_started",
+          "agent": "Policy Agent",
+          "detail": {
+            "query": "Please cancel my order and refund the payment.",
+            "intent": "cancel",
+            "purpose": "Find the governing policy and approval controls.",
+            "presentation_delay_ms": 800
+          },
+          "created_at": "2026-10-13T17:54:00.400+00:00"
+        },
+        {
+          "id": 7,
+          "job_id": "JOB-0EF056FFBB65",
+          "kind": "agent_completed",
+          "agent": "Policy Agent",
+          "detail": {
+            "method": "BM25 lexical search + intent routing",
+            "sources": [
+              {
+                "id": "POL-CANCEL",
+                "score": 10.9899
+              },
+              {
+                "id": "POL-CONTROL",
+                "score": 1.1513
+              },
+              {
+                "id": "POL-STATUS",
+                "score": 0.933
+              }
+            ],
+            "policy_hash": "4593dddd7165d2f5fa6e8c75401e2a8a4dcd3974488cdc5c4a3d873c16e94fff",
+            "excerpts": [
+              {
+                "id": "POL-CANCEL",
+                "title": "Cancellation before shipment",
+                "intents": [
+                  "cancel"
+                ],
+                "allowed_statuses": [
+                  "processing"
+                ],
+                "text": "Cancellation is permitted only before shipment, while an order is processing. Human approval is mandatory. A paid cancellation also records a full simulated refund. An unpaid cancellation changes only the order status. Shipped and delivered orders require manual review. Already cancelled orders need no further cancellation.",
+                "score": 10.9899,
+                "source": "data/policies.json"
+              },
+              {
+                "id": "POL-CONTROL",
+                "title": "Approval and execution controls",
+                "intents": [
+                  "status",
+                  "cancel",
+                  "refund",
+                  "unknown"
+                ],
+                "text": "Agents may call only registered tools. Cancellation and refund actions require a recorded human approval. Before executing, recheck the order version, active policy version and eligibility. Execute each approved workflow once in a database transaction. Preserve decisions, evidence, approval and execution results in the audit trail. Escalate ambiguous requests.",
+                "score": 1.1513,
+                "source": "data/policies.json"
+              },
+              {
+                "id": "POL-STATUS",
+                "title": "Order status and delivery updates",
+                "intents": [
+                  "status"
+                ],
+                "text": "Read the current order status and expected delivery date from the order database. Mark an undelivered active order as delayed when its expected delivery date has passed. Status checks never change an order.",
+                "score": 0.933,
+                "source": "data/policies.json"
+              }
+            ],
+            "duration_ms": 0.504,
+            "presentation_delay_ms": 0
+          },
+          "created_at": "2026-10-13T17:54:01.202+00:00"
+        },
+        {
+          "id": 8,
+          "job_id": "JOB-0EF056FFBB65",
+          "kind": "agent_started",
+          "agent": "Decision Agent",
+          "detail": {
+            "order_status": "processing",
+            "payment_status": "paid",
+            "purpose": "Evaluate eligibility and propose the next action.",
+            "presentation_delay_ms": 800
+          },
+          "created_at": "2026-10-13T17:54:01.202+00:00"
+        },
+        {
+          "id": 9,
+          "job_id": "JOB-0EF056FFBB65",
+          "kind": "agent_completed",
+          "agent": "Decision Agent",
+          "detail": {
+            "action": "cancel_order",
+            "eligible": true,
+            "requires_approval": true,
+            "policy_ids": [
+              "POL-CANCEL"
+            ],
+            "reason": "Eligible for cancellation before shipment. Human approval is required for cancellation and a full simulated refund.",
+            "amount_paise": 249900,
+            "warnings": [],
+            "duration_ms": 0.038,
+            "presentation_delay_ms": 0
+          },
+          "created_at": "2026-10-13T17:54:02.004+00:00"
+        },
+        {
+          "id": 10,
+          "job_id": "JOB-0EF056FFBB65",
+          "kind": "agent_waiting",
+          "agent": "Action Agent",
+          "detail": {
+            "reason": "Waiting for human approval."
+          },
+          "created_at": "2026-10-13T17:54:02.005+00:00"
+        },
+        {
+          "id": 11,
+          "job_id": "JOB-0EF056FFBB65",
+          "kind": "done",
+          "agent": "Orchestrator",
+          "detail": {
+            "workflow_id": "WF-8D429DC0DFEF",
+            "workflow_status": "pending_approval",
+            "message": "Eligible for cancellation before shipment. Human approval is required for cancellation and a full simulated refund."
+          },
+          "created_at": "2026-10-13T17:54:02.005+00:00"
+        }
+      ]
+    },
+    {
+      "id": "JOB-D11EF9F06209",
+      "kind": "review",
+      "status": "done",
+      "workflow_id": "WF-8D429DC0DFEF",
+      "fingerprint": "227c651c0e854a008e12750e0d3485c37ebff4a615d923f83cd4517c82b718b7",
+      "request_key": null,
+      "guided": 1,
+      "cancel_requested": 0,
+      "error": null,
+      "created_at": "2026-10-13T17:54:03.166+00:00",
+      "updated_at": "2026-10-13T17:54:03.970+00:00",
+      "request": {
+        "approve": true,
+        "reviewer": "Harsh Saini",
+        "note": ""
+      },
+      "events": [
+        {
+          "id": 12,
+          "job_id": "JOB-D11EF9F06209",
+          "kind": "queued",
+          "agent": "Orchestrator",
+          "detail": {
+            "message": "Request accepted into the local worker queue.",
+            "kind": "review"
+          },
+          "created_at": "2026-10-13T17:54:03.166+00:00"
+        },
+        {
+          "id": 13,
+          "job_id": "JOB-D11EF9F06209",
+          "kind": "agent_started",
+          "agent": "Action Agent",
+          "detail": {
+            "purpose": "Recheck the order and policy; commit the human decision and permitted action.",
+            "approve": true,
+            "presentation_delay_ms": 800
+          },
+          "created_at": "2026-10-13T17:54:03.167+00:00"
+        },
+        {
+          "id": 14,
+          "job_id": "JOB-D11EF9F06209",
+          "kind": "agent_completed",
+          "agent": "Action Agent",
+          "detail": {
+            "result": "Cancellation completed. Simulated refund: INR 2,499.00. No real money was transferred.",
+            "status": "completed",
+            "duration_ms": 1.793
+          },
+          "created_at": "2026-10-13T17:54:03.969+00:00"
+        },
+        {
+          "id": 15,
+          "job_id": "JOB-D11EF9F06209",
+          "kind": "done",
+          "agent": "Orchestrator",
+          "detail": {
+            "workflow_id": "WF-8D429DC0DFEF",
+            "workflow_status": "completed",
+            "message": "Cancellation completed. Simulated refund: INR 2,499.00. No real money was transferred."
+          },
+          "created_at": "2026-10-13T17:54:03.970+00:00"
+        }
+      ]
+    }
+  ]
+}

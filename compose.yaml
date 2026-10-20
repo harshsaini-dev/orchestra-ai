@@ -1,0 +1,13 @@
+services:
+  orchestra:
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      AGENTFLOW_DB: /app/data/agentflow.db
+      AGENTFLOW_ALLOWED_HOSTS: localhost,127.0.0.1
+    volumes:
+      - orchestra-data:/app/data
+    restart: unless-stopped
+volumes:
+  orchestra-data:

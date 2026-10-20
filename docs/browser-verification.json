@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "checks": [
+    "Actual running agent is visible before workflow persistence.",
+    "Reload reconnects to persisted job; Action Agent waits for approval.",
+    "Agent inspector displays retrieved policy evidence.",
+    "Approved action streams, commits once, and updates comparison.",
+    "Historical replay reconstructs steps without executing or mutating data.",
+    "Stop at agent boundary leaves the order unchanged.",
+    "Normal-speed execution and rejection work without a refund.",
+    "Filtered history, CSV export and trace reopening work.",
+    "Mobile at 390px has no horizontal page overflow; guides and policies load.",
+    "No uncaught JavaScript errors."
+  ],
+  "javascript_errors": [],
+  "browser": "Chromium 134 / Playwright 1.51.0"
+}

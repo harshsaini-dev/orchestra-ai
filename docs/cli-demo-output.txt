@@ -1,0 +1,25 @@
+1. Workflow created: WF-5C703A603F3D pending_approval
+2. Decision: Eligible for cancellation before shipment. Human approval is required for cancellation and a full simulated refund.
+3. Before approval: processing
+4. After approval: Cancellation completed. Simulated refund: INR 2,499.00. No real money was transferred.
+5. Audit events:
+   Planner Agent -> plan_created
+   Data Agent -> tool_result
+   Policy Agent -> policies_retrieved
+   Decision Agent -> decision_made
+   Orchestrator -> workflow_pending_approval
+   Human Reviewer -> approval_granted
+   Action Agent -> tool_executed
+   Orchestrator -> workflow_completed
+6. Final order: {
+  "id": "ORD-1001",
+  "customer": "Aarav Sharma",
+  "product": "Wireless keyboard",
+  "amount_paise": 249900,
+  "status": "cancelled",
+  "payment_status": "refunded",
+  "due_at": "2026-10-11T17:08:11+00:00",
+  "delivered_at": null,
+  "version": 2
+}
+Demo completed. Temporary data has been discarded.

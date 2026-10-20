@@ -1,0 +1,16 @@
+id,product,stock,demand30,unit_cost
+SKU001,Component 1,4,150,270
+SKU002,Component 2,4,150,290
+SKU003,Component 3,4,150,310
+SKU004,Component 4,100,150,330
+SKU005,Component 5,100,150,350
+SKU006,Component 6,100,150,370
+SKU007,Component 7,100,150,390
+SKU008,Component 8,100,150,410
+SKU009,Component 9,100,150,430
+SKU010,Component 10,100,150,450
+SKU011,Component 11,100,150,470
+SKU012,Component 12,100,150,490
+SKU013,Component 13,100,150,510
+SKU014,Component 14,100,150,530
+SKU015,Component 15,100,150,550

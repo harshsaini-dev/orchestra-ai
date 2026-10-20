@@ -1,0 +1,21 @@
+{
+  "synthetic": true,
+  "seed": 42,
+  "sales_period": [
+    "2025-01-01",
+    "2025-12-31"
+  ],
+  "rows": 1180,
+  "planted": [
+    "duplicate sale",
+    "missing customer",
+    "whitespace",
+    "sales outlier",
+    "discount violation",
+    "low stock",
+    "large refunds",
+    "overdue invoice",
+    "leave notice breach",
+    "annual source review overdue"
+  ]
+}

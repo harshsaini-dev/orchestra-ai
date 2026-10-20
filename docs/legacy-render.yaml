@@ -1,0 +1,24 @@
+services:
+  - type: web
+    runtime: docker
+    name: agentflow-rag
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    plan: starter
+    numInstances: 1
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-3.8-flash
+      - key: GEMINI_EMBEDDING_MODEL
+        value: gemini-embedding-001
+      - key: AGENTFLOW_DB
+        value: /app/data/agentflow.db
+      - key: AGENTFLOW_ALLOWED_HOSTS
+        value: "*.onrender.com"
+    disk:
+      name: agentflow-data
+      mountPath: /app/data
+      sizeGB: 1

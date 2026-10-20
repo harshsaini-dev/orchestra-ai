@@ -1,0 +1,1 @@
+Historical v0.5 evidence retained from the earlier project package. These screenshots and report describe the previous UI. For current v0.6 features and verification, see the parent directory and project README.

@@ -1,0 +1,7 @@
+AgentFlow sample customer-support handbook
+
+When contacting support, customers should provide their order ID, a brief description of the problem, and the date on which they noticed it. They should never send payment-card numbers, passwords or one-time passwords.
+
+For a missing package, support first checks the recorded order and delivery status. If the order has shipped and its location cannot be resolved, a human support reviewer investigates the issue.
+
+This document provides supplementary support guidance. It does not replace the governing cancellation/refund rules and does not grant permission to change orders or transfer money. Cancellation and eligible refunds still require recorded human approval in this prototype.

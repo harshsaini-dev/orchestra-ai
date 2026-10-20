@@ -1,0 +1,52 @@
+{
+  "benchmark": "SME handbook golden fixture v1",
+  "questions": [
+    {
+      "question": "refund manager approval 5000",
+      "expected_section": "Refund approvals",
+      "hit_at_5": true,
+      "latency_ms": 1.077,
+      "abstained": false
+    },
+    {
+      "question": "discount Gold percent",
+      "expected_section": "Discount control",
+      "hit_at_5": true,
+      "latency_ms": 0.632,
+      "abstained": false
+    },
+    {
+      "question": "inventory stock forecast demand",
+      "expected_section": "Inventory planning",
+      "hit_at_5": true,
+      "latency_ms": 0.999,
+      "abstained": false
+    },
+    {
+      "question": "invoice overdue escalation",
+      "expected_section": "Invoice escalation",
+      "hit_at_5": true,
+      "latency_ms": 0.728,
+      "abstained": false
+    },
+    {
+      "question": "leave notice days",
+      "expected_section": "Leave and notice",
+      "hit_at_5": true,
+      "latency_ms": 0.581,
+      "abstained": false
+    }
+  ],
+  "hit_at_5": 1.0,
+  "citation_validity": 1.0,
+  "citations_checked": 8,
+  "policy_accuracy": 1.0,
+  "policy_cases": 10,
+  "latency_median_ms": 0.728,
+  "latency_max_ms": 1.077,
+  "retry_success": 1,
+  "retry_trials": 1,
+  "retry_attempts": 2,
+  "unsupported_question_abstained": true,
+  "scope": "Five known demo sections and ten fixed default-rule boundary cases. Citation validity checks source existence and exact passage, not semantic entailment. Retry is one injected read fault; not production reliability."
+}

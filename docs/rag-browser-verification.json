@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "checks": [
+    "Real Chroma index and browser cited answer, with explicitly mocked provider.",
+    "Upload, chunk inspection, pending-index state and retrieval-only source view.",
+    "Live agent workflow records Chroma retrieval and RAG output; approval still gates mutation.",
+    "390px RAG layout without horizontal page overflow."
+  ],
+  "javascript_errors": [],
+  "provider": "mocked; no live Gemini calls",
+  "vector_store": "real ChromaDB 1.5.9"
+}
